@@ -8,6 +8,15 @@ const config = {
   formApiMethod: "POST"
 };
 
+let showAllPlaces = false;
+
+function normalizeText(text) {
+  return (text || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 const translations = {
   pt: {
     htmlLang: "pt-PT",
@@ -296,45 +305,81 @@ const translations = {
       ]
     },
     tourismPlaces: [
-      {
-        category: "Palácios",
-        title: "Paço dos Duques de Bragança",
-        imageClass: "image-paco-duques",
-        badge: "Imperdível",
-        description: "Construído no século XV pelo 1.º Duque de Bragança, é um dos palácios medievais mais marcantes de Portugal."
-      },
-      {
-        category: "Natureza",
-        title: "Serra da Penha",
-        imageClass: "image-serra-penha",
-        description: "Suba de teleférico ou a pé e descubra uma das melhores vistas panorâmicas sobre Guimarães."
-      },
-      {
-        category: "Monumentos",
-        title: "Castelo de Guimarães",
-        imageClass: "image-castelo-guimaraes",
-        description: "Símbolo da fundação de Portugal e um dos monumentos mais icónicos da cidade."
-      },
-      {
-        category: "Centro Histórico",
-        title: "Centro Histórico",
-        imageClass: "image-centro-historico",
-        badge: "UNESCO",
-        description: "Ruas medievais, praças animadas e um ambiente único que convida a explorar a pé."
-      },
-      {
-        category: "Igrejas",
-        title: "Igreja da Oliveira",
-        imageClass: "image-igreja-oliveira",
-        description: "Um dos marcos religiosos e históricos mais importantes do coração da cidade."
-      },
-      {
-        category: "Museus",
-        title: "Museu Martins Sarmento",
-        imageClass: "image-museu-martins",
-        description: "Coleção arqueológica de referência para conhecer melhor a herança castreja e romana da região."
-      }
-    ],
+  {
+    category: "Palácios",
+    title: "Paço dos Duques de Bragança",
+    imageClass: "image-paco-duques",
+    badge: "Imperdível",
+    description: "Construído no século XV pelo 1.º Duque de Bragança, é um dos palácios medievais mais marcantes de Portugal."
+  },
+  {
+    category: "Monumentos",
+    title: "Castelo de Guimarães",
+    imageClass: "image-castelo-guimaraes",
+    description: "Símbolo da fundação de Portugal e um dos monumentos mais icónicos da cidade."
+  },
+  {
+    category: "Centro Histórico",
+    title: "Centro Histórico",
+    imageClass: "image-centro-historico",
+    badge: "UNESCO",
+    description: "Ruas medievais, praças animadas e um ambiente único que convida a explorar a pé."
+  },
+  {
+    category: "Igrejas",
+    title: "Igreja da Oliveira",
+    imageClass: "image-igreja-oliveira",
+    description: "Um dos marcos religiosos e históricos mais importantes do coração da cidade."
+  },
+  {
+    category: "Museus",
+    title: "Museu Martins Sarmento",
+    imageClass: "image-museu-martins",
+    description: "Coleção arqueológica de referência para conhecer melhor a herança castreja e romana da região."
+  },
+  {
+    category: "Natureza",
+    title: "Serra da Penha",
+    imageClass: "image-serra-penha",
+    description: "Suba de teleférico ou a pé e descubra uma das melhores vistas panorâmicas sobre Guimarães."
+  },
+  {
+    category: "Museus",
+    title: "Museu Alberto Sampaio",
+    imageClass: "image-museu-alberto",
+    description: "Instalado no antigo convento da Colegiada, alberga peças de ourivesaria, escultura e têxteis medievais."
+  },
+  {
+    category: "Palácios",
+    title: "Sala de Armas do Paço dos Duques",
+    imageClass: "image-paco-armas",
+    description: "Uma das salas mais imponentes do Paço, com uma vasta coleção de armaduras e armas históricas."
+  },
+  {
+    category: "Monumentos",
+    title: "Muralhas Medievais",
+    imageClass: "image-muralhas",
+    description: "Troços das antigas muralhas que cercavam a cidade medieval, testemunhas silenciosas de séculos de história."
+  },
+  {
+    category: "Igrejas",
+    title: "Igreja de São Francisco",
+    imageClass: "image-sao-francisco",
+    description: "Igreja do século XV com belos azulejos barrocos e um claustro sereno no coração da cidade."
+  },
+  {
+    category: "Cultura",
+    title: "Plataforma das Artes e da Cultura",
+    imageClass: "image-plataforma-artes",
+    description: "Espaço cultural contemporâneo com exposições, workshops e uma programação vibrante ao longo do ano."
+  },
+  {
+    category: "Natureza",
+    title: "Parque da Cidade",
+    imageClass: "image-parque-cidade",
+    description: "Um pulmão verde no coração de Guimarães, ideal para caminhadas, piqueniques e momentos de lazer."
+  }
+],
     readMoreLabel: "Saber mais →",
     defaultPlaceCategory: "Local",
     defaultPlaceTitle: "Ponto turístico"
@@ -625,46 +670,82 @@ const translations = {
         "Other"
       ]
     },
-    tourismPlaces: [
-      {
-        category: "Palaces",
-        title: "Palace of the Dukes of Braganza",
-        imageClass: "image-paco-duques",
-        badge: "Must-see",
-        description: "Built in the 15th century by the 1st Duke of Braganza, it is one of Portugal's most striking medieval palaces."
-      },
-      {
-        category: "Nature",
-        title: "Penha Mountain",
-        imageClass: "image-serra-penha",
-        description: "Go up by cable car or on foot and enjoy one of the best panoramic views over Guimarães."
-      },
-      {
-        category: "Monuments",
-        title: "Guimarães Castle",
-        imageClass: "image-castelo-guimaraes",
-        description: "A symbol of Portugal's foundation and one of the city's most iconic monuments."
-      },
-      {
-        category: "Historic Centre",
-        title: "Historic Centre",
-        imageClass: "image-centro-historico",
-        badge: "UNESCO",
-        description: "Medieval streets, lively squares and a unique atmosphere that invites you to explore on foot."
-      },
-      {
-        category: "Churches",
-        title: "Oliveira Church",
-        imageClass: "image-igreja-oliveira",
-        description: "One of the most important religious and historical landmarks in the heart of the city."
-      },
-      {
-        category: "Museums",
-        title: "Martins Sarmento Museum",
-        imageClass: "image-museu-martins",
-        description: "A landmark archaeological collection to better understand the region's Celtic and Roman heritage."
-      }
-    ],
+   tourismPlaces: [
+  {
+    category: "Palaces",
+    title: "Palace of the Dukes of Braganza",
+    imageClass: "image-paco-duques",
+    badge: "Must-see",
+    description: "Built in the 15th century by the 1st Duke of Braganza, it is one of Portugal's most striking medieval palaces."
+  },
+  {
+    category: "Monuments",
+    title: "Guimarães Castle",
+    imageClass: "image-castelo-guimaraes",
+    description: "A symbol of Portugal's foundation and one of the city's most iconic monuments."
+  },
+  {
+    category: "Historic Centre",
+    title: "Historic Centre",
+    imageClass: "image-centro-historico",
+    badge: "UNESCO",
+    description: "Medieval streets, lively squares and a unique atmosphere that invites you to explore on foot."
+  },
+  {
+    category: "Churches",
+    title: "Oliveira Church",
+    imageClass: "image-igreja-oliveira",
+    description: "One of the most important religious and historical landmarks in the heart of the city."
+  },
+  {
+    category: "Museums",
+    title: "Martins Sarmento Museum",
+    imageClass: "image-museu-martins",
+    description: "A landmark archaeological collection to better understand the region's Celtic and Roman heritage."
+  },
+  {
+    category: "Nature",
+    title: "Penha Mountain",
+    imageClass: "image-serra-penha",
+    description: "Go up by cable car or on foot and enjoy one of the best panoramic views over Guimarães."
+  },
+  {
+    category: "Museums",
+    title: "Alberto Sampaio Museum",
+    imageClass: "image-museu-alberto",
+    description: "Housed in the former collegiate convent, it holds outstanding medieval goldwork, sculpture and textiles."
+  },
+  {
+    category: "Palaces",
+    title: "Dukes' Palace — Armoury",
+    imageClass: "image-paco-armas",
+    description: "One of the palace's most impressive rooms, featuring a remarkable collection of armour and historic weapons."
+  },
+  {
+    category: "Monuments",
+    title: "Medieval Walls",
+    imageClass: "image-muralhas",
+    description: "Remaining sections of the walls that once enclosed the medieval city, silent witnesses to centuries of history."
+  },
+  {
+    category: "Churches",
+    title: "São Francisco Church",
+    imageClass: "image-sao-francisco",
+    description: "A 15th-century church with beautiful baroque azulejos and a serene cloister in the heart of the city."
+  },
+  {
+    category: "Culture",
+    title: "Platform for Arts and Culture",
+    imageClass: "image-plataforma-artes",
+    description: "A contemporary cultural space with exhibitions, workshops and a vibrant programme throughout the year."
+  },
+  {
+    category: "Nature",
+    title: "City Park",
+    imageClass: "image-parque-cidade",
+    description: "A green lung in the heart of Guimarães, perfect for walks, picnics and relaxing moments."
+  }
+],
     readMoreLabel: "Learn more →",
     defaultPlaceCategory: "Place",
     defaultPlaceTitle: "Tourist attraction"
@@ -958,11 +1039,13 @@ function renderTourismPlaces(places) {
   if (!dom.tourismResults) return;
 
   dom.tourismResults.innerHTML = "";
-  places.forEach((place) => {
+
+  const visiblePlaces = showAllPlaces ? places : places.slice(0, 6);
+
+  visiblePlaces.forEach((place) => {
     dom.tourismResults.appendChild(createTourismCard(place));
   });
 }
-
 function renderFallbackTourismPlaces() {
   tourismDataSource = "fallback";
   renderTourismPlaces(getFallbackTourismPlaces());
@@ -974,6 +1057,69 @@ function normalizeTourismData(data) {
   if (Array.isArray(data?.data)) return data.data;
   return getFallbackTourismPlaces();
 }
+
+
+
+
+
+
+
+
+
+
+function getAllTourismData() {
+  return translations[currentLang].tourismPlaces;
+}
+
+
+function normalizeCategory(text) {
+  return normalizeText(text)
+    .replace(/s$/, ""); // remove plural simples (palacios -> palacio)
+}
+
+function filterTourismPlaces(query, date) {
+  const all = getAllTourismData();
+
+  const q = normalizeText(query);
+  const qCat = normalizeCategory(query);
+
+  let results = [...all];
+
+  if (q) {
+    results = results.filter(place => {
+      const title = normalizeText(place.title);
+      const desc = normalizeText(place.description);
+      const category = normalizeCategory(place.category);
+
+      return (
+        title.includes(q) ||
+        desc.includes(q) ||
+        category.includes(q) ||      // palácio, igreja, etc
+        category.includes(qCat)       // versão normalizada
+      );
+    });
+  }
+
+  if (date) {
+    results.sort((a, b) => {
+      const aIsEvent = (a.category || "").toLowerCase().includes("event");
+      const bIsEvent = (b.category || "").toLowerCase().includes("event");
+      return (bIsEvent === aIsEvent) ? 0 : (bIsEvent ? 1 : -1);
+    });
+  }
+
+  return results;
+}
+
+
+
+
+
+
+
+
+
+
 
 function applyLanguage(lang) {
   currentLang = translations[lang] ? lang : "pt";
@@ -1047,7 +1193,31 @@ async function fetchTourismPlaces(query, date) {
   }
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
+
+
+const showAllPlacesBtn = document.getElementById("showAllPlaces");
+
+if (showAllPlacesBtn) {
+  showAllPlacesBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    showAllPlaces = !showAllPlaces;
+
+    const allPlaces = getAllTourismData();
+
+    if (showAllPlaces) {
+      renderTourismPlaces(allPlaces);
+      this.textContent = "Ver menos pontos de interesse";
+    } else {
+      renderTourismPlaces(allPlaces.slice(0, 6));
+      this.textContent = "Ver todos os pontos de interesse";
+    }
+  });
+}
+
+
   dom.tourismResults = document.getElementById("tourismResults");
   dom.tourismStatus = document.getElementById("tourismStatus");
   dom.tourismSearchForm = document.getElementById("tourismSearchForm");
@@ -1100,13 +1270,74 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  if (dom.tourismSearchForm) {
-    dom.tourismSearchForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const formData = new FormData(dom.tourismSearchForm);
-      fetchTourismPlaces(formData.get("query"), formData.get("date"));
+
+const suggestions = document.querySelectorAll(".chat-suggestion");
+
+suggestions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const text = btn.textContent;
+
+    // mostra mensagem do utilizador
+    dom.chatMessages.innerHTML += `<div class="user-msg">${text}</div>`;
+
+    // resposta automática simples (podes melhorar depois)
+    let reply = "";
+
+    if (text.includes("comer")) {
+      reply = "Em Guimarães tens ótimos restaurantes como Cozinha Regional e Histórico by Papaboa.";
+    } 
+    else if (text.includes("Castelo")) {
+      reply = "O Castelo de Guimarães é do século X e é considerado o berço de Portugal.";
+    } 
+    else {
+      reply = "Posso ajudar-te com informações sobre turismo, história e locais a visitar em Guimarães.";
+    }
+
+    setTimeout(() => {
+      dom.chatMessages.innerHTML += `<div class="bot-msg">${reply}</div>`;
+      dom.chatMessages.scrollTop = dom.chatMessages.scrollHeight;
+    }, 500);
+  });
+});
+
+
+
+if (dom.tourismSearchForm) {
+  dom.tourismSearchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(dom.tourismSearchForm);
+    const query = formData.get("query") || "";
+    const date = formData.get("date") || "";
+
+    const results = filterTourismPlaces(query, date);
+
+    tourismDataSource = "filtered";
+    renderTourismPlaces(results);
+
+    // feedback UX
+    if (results.length === 0) {
+      setStatus("tourism", "error");
+    } else {
+      clearStatus("tourism");
+    }
+
+    // scroll automático para resultados
+    dom.tourismResults?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
     });
-  }
+  });
+}
+
+
+
+
+
+
+
+
+
 
   if (dom.newsletterForm) {
     dom.newsletterForm.addEventListener("submit", async (event) => {
@@ -1222,3 +1453,4 @@ document.addEventListener("DOMContentLoaded", () => {
   renderFallbackTourismPlaces();
   applyLanguage(currentLang);
 });
+

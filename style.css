@@ -22,6 +22,26 @@
   --shadow-lg:  0 10px 40px rgba(26,26,46,.15);
 }
 
+.chat-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.chat-suggestion {
+  background: #f2f2f2;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.chat-suggestion:hover {
+  background: #ddd;
+}
+
 /* ── Reset ──────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -1252,4 +1272,12 @@ button, input, select, textarea { font: inherit; }
   .stat-box:last-child { border-bottom: none; }
 
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+.extra-place {
+    display: none;
+}
+
+.extra-place.show {
+    display: block;
 }

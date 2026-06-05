@@ -43,45 +43,38 @@
  
   <main>
  
-    <!-- ── HERO ────────────────────────────────────────────── -->
-    <section class="hero" id="inicio">
-      <div class="hero-overlay">
-        <div class="container hero-content">
-          <p class="hero-label">Bem-vindo a</p>
+   <!-- ── HERO ────────────────────────────────────────────── -->
+<section class="hero" id="inicio">
+  <div class="hero-overlay">
+    <div class="container hero-content">
+      <p class="hero-label">Bem-vindo a</p>
 
-       <h1 data-i18n="hero_title">Guimarães</h1>
+      <h1 data-i18n="hero_title">Guimarães</h1>
 
-<p class="hero-subtitle" data-i18n="hero_subtitle">
-  Onde Portugal nasceu. Uma cidade de história, cultura e tradição viva.
-</p>
+      <p class="hero-subtitle" data-i18n="hero_subtitle">
+        Onde Portugal nasceu. Uma cidade de história, cultura e tradição viva.
+      </p>
 
-
- 
-          <form class="search-bar" id="tourismSearchForm">
-            <div class="search-field">
-              <label for="tourismQuery">O QUE PROCURA?</label>
-              <input id="tourismQuery" name="query" type="text" placeholder="Monumentos, eventos, restaurantes…">
-            </div>
-            <div class="search-divider"></div>
-            <div class="search-field">
-              <label for="tourismDate">QUANDO?</label>
-              <input id="tourismDate" name="date" type="date">
-            </div>
-
-
-            <button class="button button-primary search-button" type="submit" data-i18n="search_button">
-  🔍 Pesquisar
-</button>
-
-          </form>
- 
-          <a class="hero-more" href="#historia">
-            <span>Descobrir mais</span>
-            <strong>↓</strong>
-          </a>
+      <form class="search-bar" id="tourismSearchForm">
+        <div class="search-field">
+          <label for="tourismQuery">O QUE PROCURA?</label>
+          <input id="tourismQuery" name="query" type="text" placeholder="Monumentos, eventos, restaurantes…">
         </div>
-      </div>
-    </section>
+
+        <div class="search-divider"></div>
+
+        <button class="button button-primary search-button" type="submit" data-i18n="search_button">
+          🔍 Pesquisar
+        </button>
+      </form>
+
+      <a class="hero-more" href="#historia">
+        <span>Descobrir mais</span>
+        <strong>↓</strong>
+      </a>
+    </div>
+  </div>
+</section>
  
     <!-- ── STATS BAR ────────────────────────────────────────── -->
     <section class="stats-bar">
@@ -181,6 +174,64 @@
             <p>Miradouro natural com vistas panorâmicas sobre a cidade. Acessível por teleférico ou a pé.</p>
             <a class="inline-link" href="#">Saber mais →</a>
           </article>
+
+
+
+
+
+
+         
+          <article class="place-card">
+        <div class="place-image image-paco"><span class="badge badge-highlight">Imperdível</span></div>
+        <span class="card-tag">Palácios</span>
+        <h3>Paço dos Duques de Bragança (Cópia)</h3>
+        <p>Imponente palácio medieval do século XV...</p>
+        <a class="inline-link" href="#">Saber mais →</a>
+      </article>
+
+      <article class="place-card">
+        <div class="place-image image-penha"></div>
+        <span class="card-tag">Natureza</span>
+        <h3>Serra da Penha (Cópia)</h3>
+        <p>Miradouro natural com vistas panorâmicas...</p>
+        <a class="inline-link" href="#">Saber mais →</a>
+      </article>
+
+
+       <article class="place-card">
+        <div class="place-image image-paco"><span class="badge badge-highlight">Imperdível</span></div>
+        <span class="card-tag">Palácios</span>
+        <h3>Paço dos Duques de Bragança (Cópia)</h3>
+        <p>Imponente palácio medieval do século XV...</p>
+        <a class="inline-link" href="#">Saber mais →</a>
+      </article>
+
+      <article class="place-card">
+        <div class="place-image image-penha"></div>
+        <span class="card-tag">Natureza</span>
+        <h3>Serra da Penha (Cópia)</h3>
+        <p>Miradouro natural com vistas panorâmicas...</p>
+        <a class="inline-link" href="#">Saber mais →</a>
+      </article> <article class="place-card">
+
+
+        <div class="place-image image-paco"><span class="badge badge-highlight">Imperdível</span></div>
+        <span class="card-tag">Palácios</span>
+        <h3>Paço dos Duques de Bragança (Cópia)</h3>
+        <p>Imponente palácio medieval do século XV...</p>
+        <a class="inline-link" href="#">Saber mais →</a>
+      </article>
+
+
+
+      <article class="place-card">
+        <div class="place-image image-penha"></div>
+        <span class="card-tag">Natureza</span>
+        <h3>Serra da Penha (Cópia)</h3>
+        <p>Miradouro natural com vistas panorâmicas...</p>
+        <a class="inline-link" href="#">Saber mais →</a>
+      </article>
+
  
           <article class="place-card">
             <div class="place-image image-castelo"></div>
@@ -189,6 +240,9 @@
             <p>O berço da nação portuguesa, onde nasceu D. Afonso Henriques. Um símbolo eterno da identidade nacional.</p>
             <a class="inline-link" href="#">Saber mais →</a>
           </article>
+
+
+
  
           <article class="place-card">
             <div class="place-image image-centro">
@@ -216,11 +270,15 @@
             <a class="inline-link" href="#">Saber mais →</a>
           </article>
         </div>
+
+        
  
         <p class="status-message" id="tourismStatus"></p>
  
         <div class="section-action">
-          <a class="button button-outline-wide" href="#">Ver todos os pontos de interesse</a>
+         <a href="#" id="showAllPlaces" class="button button-outline-wide">
+    Ver todos os pontos de interesse
+</a>
         </div>
       </div>
     </section>
@@ -463,7 +521,7 @@
               <span class="link-url">cm-guimaraes.pt →</span>
             </div>
           </a>
-          <a class="link-card" href="https://www.guimaraesturismo.com" target="_blank">
+          <a class="link-card" href= "https://www.guimaraesturismo.com" target="_blank">
             <span class="link-icon">🗺️</span>
             <div class="link-text">
               <h3>Guimarães Turismo</h3>
@@ -471,7 +529,7 @@
               <span class="link-url">guimaraesturismo.com →</span>
             </div>
           </a>
-          <a class="link-card" href="https://whc.unesco.org" target="_blank">
+          <a class="link-card" href="https://whc.unesco.org/en/list/1031" target="_blank">
             <span class="link-icon">🌍</span>
             <div class="link-text">
               <h3>UNESCO Património Mundial</h3>
@@ -479,7 +537,7 @@
               <span class="link-url">whc.unesco.org →</span>
             </div>
           </a>
-          <a class="link-card" href="https://www.visitportugal.com" target="_blank">
+          <a class="link-card" href="https://www.visitportugal.com/pt-pt/destinos/norte/guimaraes" target="_blank">
             <span class="link-icon">🇵🇹</span>
             <div class="link-text">
               <h3>Turismo de Portugal</h3>
@@ -495,7 +553,7 @@
               <span class="link-url">vitoriasc.pt →</span>
             </div>
           </a>
-          <a class="link-card" href="https://www.cp.pt" target="_blank">
+          <a class="link-card" href="https://cp.pt" target="_blank">
             <span class="link-icon">🚂</span>
             <div class="link-text">
               <h3>CP Comboios de Portugal</h3>
@@ -641,7 +699,7 @@
       <div class="footer-column">
         <h3>Planear</h3>
         <a href="#alojamento">Alojamento</a>
-        <a href="#">Restaurantes</a>
+        <a href="https://www.visitguimaraes.travel/descobrir/guimaraes-a-mesa">Restaurantes</a>
         <a href="#localizacao">Como Chegar</a>
         <a href="#localizacao">Transportes</a>
         <a href="#">Guias Turísticos</a>
@@ -694,6 +752,12 @@
       Olá! Sou o guia turístico com Inteligência Artificial de Guimarães. Pergunte-me qualquer coisa sobre a cidade!
     </div>
   </div>
+  <div class="chat-suggestions">
+  <button class="chat-suggestion">O que visitar em Guimarães?</button>
+  <button class="chat-suggestion">Melhores restaurantes típicos</button>
+  <button class="chat-suggestion">Eventos desta semana</button>
+  <button class="chat-suggestion">Onde ficar em Guimarães?</button>
+</div>
   
   <div style="padding: 10px; background: white; border-top: 1px solid #eee; display: flex; gap: 5px;">
     <input type="text" id="chatInput" placeholder="Pergunte algo sobre Guimarães..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none;">
