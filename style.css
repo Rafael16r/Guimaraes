@@ -359,14 +359,22 @@ button, input, select, textarea { font: inherit; }
 .timeline-item:last-child { border-bottom: none; }
 
 .timeline-date {
-  font-family: "Playfair Display", serif;
-  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: #9a4f16;
+  color: #fff;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--gold);
-  padding-top: 3px;
+  line-height: 1;
+  text-align: center;
   flex-shrink: 0;
+  align-self: start;
 }
-
 .timeline-body h3 {
   font-size: 1rem;
   font-weight: 700;
@@ -379,6 +387,7 @@ button, input, select, textarea { font: inherit; }
   color: var(--muted);
   line-height: 1.65;
 }
+
 
 /* ── DISCOVER GRID (6 cards igual) ──────────────────────────── */
 .discover-grid {

@@ -1,11 +1,12 @@
-// Configura aqui os endpoints reais das tuas APIs.
+// Endpoints da API Flask (backend local)
 const config = {
-  tourismApiUrl: "",
+  tourismApiUrl: "http://localhost:5000/api/places",
   tourismApiMethod: "GET",
   tourismQueryParam: "q",
   tourismDateParam: "date",
-  formApiUrl: "",
-  formApiMethod: "POST"
+  formApiUrl: "http://localhost:5000/api/contact",
+  formApiMethod: "POST",
+  newsletterApiUrl: "http://localhost:5000/api/newsletter"
 };
 
 let showAllPlaces = false;
@@ -1154,9 +1155,8 @@ function applyLanguage(lang) {
     dom.langToggle.setAttribute("aria-label", content.langToggleTitle);
   }
 
-  if (tourismDataSource !== "api") {
-    renderFallbackTourismPlaces();
-  }
+  // Re-consulta a API com o novo idioma (ou usa fallback se offline)
+  fetchTourismPlaces("", "");
 
   if (statusState.tourism) setStatus("tourism", statusState.tourism);
   if (statusState.newsletter) setStatus("newsletter", statusState.newsletter);
@@ -1176,18 +1176,19 @@ async function fetchTourismPlaces(query, date) {
   try {
     const url = new URL(config.tourismApiUrl);
     if (query) url.searchParams.set(config.tourismQueryParam, query);
-    if (date) url.searchParams.set(config.tourismDateParam, date);
+    if (date)  url.searchParams.set(config.tourismDateParam, date);
+    url.searchParams.set("lang", currentLang);
 
-    const response = await fetch(url.toString(), {
-      method: config.tourismApiMethod
-    });
+    const response = await fetch(url.toString(), { method: config.tourismApiMethod });
+
+    if (!response.ok) throw new Error("API respondeu com " + response.status);
 
     const data = await response.json();
     tourismDataSource = "api";
     clearStatus("tourism");
     renderTourismPlaces(normalizeTourismData(data));
   } catch (error) {
-    console.error(error);
+    console.error("[API places]", error);
     setStatus("tourism", "error");
     renderFallbackTourismPlaces();
   }
@@ -1346,11 +1347,14 @@ if (dom.tourismSearchForm) {
 
       const email = String(new FormData(dom.newsletterForm).get("email") || "").trim();
       const submitButton = dom.newsletterForm.querySelector('button[type="submit"]');
-
       if (submitButton) submitButton.disabled = true;
 
+      // URL da API de newsletter (endpoint dedicado no Flask)
+      const newsletterUrl = config.newsletterApiUrl || "";
+
       try {
-        if (!config.formApiUrl) {
+        if (!newsletterUrl) {
+          // Fallback: guarda só no localStorage se o servidor não estiver disponível
           const { duplicate } = saveNewsletterSubscription(email);
           setStatus("newsletter", duplicate ? "duplicate" : "success");
           openNewsletterPopup(duplicate ? "duplicate" : "success", email);
@@ -1358,24 +1362,29 @@ if (dom.tourismSearchForm) {
           return;
         }
 
-        const response = await fetch(config.formApiUrl, {
-          method: config.formApiMethod,
+        const response = await fetch(newsletterUrl, {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email })
         });
 
-        if (!response.ok) {
-          throw new Error(`Newsletter request failed with status ${response.status}`);
-        }
+        const result = await response.json();
 
-        saveNewsletterSubscription(email);
-        setStatus("newsletter", "success");
-        openNewsletterPopup("success", email);
-        dom.newsletterForm.reset();
+        if (result.ok) {
+          saveNewsletterSubscription(email); // guarda também localmente
+          setStatus("newsletter", result.duplicate ? "duplicate" : "success");
+          openNewsletterPopup(result.duplicate ? "duplicate" : "success", email);
+          dom.newsletterForm.reset();
+        } else {
+          throw new Error(result.message || "Erro desconhecido");
+        }
       } catch (error) {
-        console.error(error);
-        setStatus("newsletter", "error");
-        openNewsletterPopup("error", email);
+        console.error("[API newsletter]", error);
+        // Fallback localStorage se o servidor falhar
+        const { duplicate } = saveNewsletterSubscription(email);
+        setStatus("newsletter", duplicate ? "duplicate" : "success");
+        openNewsletterPopup(duplicate ? "duplicate" : "success", email);
+        dom.newsletterForm.reset();
       } finally {
         if (submitButton) submitButton.disabled = false;
       }
@@ -1389,31 +1398,71 @@ if (dom.tourismSearchForm) {
   }
 
   if (dom.contactForm) {
-    dom.contactForm.addEventListener("submit", function (event) {
+    dom.contactForm.addEventListener("submit", async function (event) {
       event.preventDefault();
-
-      if (!window.emailjs) {
-        setStatus("contact", "emailjsMissing");
-        return;
-      }
 
       const submitButton = this.querySelector('button[type="submit"]');
       if (submitButton) submitButton.disabled = true;
-
       setStatus("contact", "sending");
 
-      emailjs.sendForm("service_pilw1bq", "template_bonpigp", this)
-        .then(() => {
-          setStatus("contact", "success");
-          dom.contactForm.reset();
-        })
-        .catch((error) => {
-          console.error(error);
-          setStatus("contact", "error");
-        })
-        .finally(() => {
-          if (submitButton) submitButton.disabled = false;
+      const formData = new FormData(dom.contactForm);
+      const payload = {
+        name:    formData.get("name")    || "",
+        email:   formData.get("email")   || "",
+        subject: formData.get("subject") || "",
+        message: formData.get("message") || ""
+      };
+
+      // Se a API Flask não estiver configurada, cai no EmailJS como fallback
+      if (!config.formApiUrl) {
+        if (!window.emailjs) { setStatus("contact", "emailjsMissing"); if (submitButton) submitButton.disabled = false; return; }
+        emailjs.sendForm("service_pilw1bq", "template_bonpigp", this)
+          .then(() => { setStatus("contact", "success"); dom.contactForm.reset(); })
+          .catch(() => setStatus("contact", "error"))
+          .finally(() => { if (submitButton) submitButton.disabled = false; });
+        return;
+      }
+
+      try {
+        const response = await fetch(config.formApiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
+
+        const result = await response.json();
+
+        if (result.ok) {
+          // Mostra a classificação da IA junto à mensagem de sucesso
+          const classification = result.classification || "";
+          const extra = classification === "suspeita"
+            ? " (em análise)"
+            : "";
+          dom.contactStatus.textContent = (result.message || translations[currentLang].contactStatus.success) + extra;
+          dom.contactStatus.style.color = "#2d6a4f";
+          dom.contactForm.reset();
+
+          // Fallback EmailJS para também enviar o email real (opcional)
+          if (window.emailjs) {
+            emailjs.send("service_pilw1bq", "template_bonpigp", payload).catch(() => {});
+          }
+        } else {
+          dom.contactStatus.textContent = result.message || translations[currentLang].contactStatus.error;
+          dom.contactStatus.style.color = "#c0392b";
+        }
+      } catch (error) {
+        console.error("[API contact]", error);
+        // Fallback EmailJS se o servidor Flask não estiver acessível
+        if (window.emailjs) {
+          emailjs.sendForm("service_pilw1bq", "template_bonpigp", dom.contactForm)
+            .then(() => { setStatus("contact", "success"); dom.contactForm.reset(); })
+            .catch(() => setStatus("contact", "error"));
+        } else {
+          setStatus("contact", "error");
+        }
+      } finally {
+        if (submitButton) submitButton.disabled = false;
+      }
     });
   }
 
@@ -1450,7 +1499,8 @@ if (dom.tourismSearchForm) {
     });
   }
 
-  renderFallbackTourismPlaces();
+  // Carrega pontos de interesse da API (com fallback automático se offline)
+  fetchTourismPlaces("", "");
   applyLanguage(currentLang);
 });
 
